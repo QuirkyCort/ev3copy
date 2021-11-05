@@ -9,6 +9,7 @@ const allToBrowserBtn = document.getElementById('allToBrowser');
 const copyToFileBtn = document.getElementById('copyToFile');
 const allToFileBtn = document.getElementById('allToFile');
 const deleteSelectedBtn = document.getElementById('deleteSelected');
+const browserOrCloud = document.getElementById('browserOrCloud');
 
 const fileBlocksDiv = document.getElementById('fileBlocks');
 const browserBlocksDiv = document.getElementById('browserBlocks');
@@ -532,6 +533,7 @@ function retrieveFromCloud() {
             if (content == 'INVALID') {
                 invalidWarning.style.display = '';
             } else {
+                browserOrCloud.innerText = 'Cloud';
                 if (content) {
                     browserProject = JSON.parse(content);
                 } else {
