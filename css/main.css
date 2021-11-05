@@ -1,0 +1,122 @@
+header {
+    font-weight: bold;
+    font-size: 200%;
+    margin-bottom: 0.5em;
+}
+
+main {
+    display: flex;
+    border: solid 1px black;
+}
+
+.blocksSection {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em;
+}
+
+.header {
+    display: flex;
+    margin-bottom: 0.5em;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+.fileSelector {
+    margin-left: 1em;
+}
+
+#filename {
+    font-size: 100%;
+    border: solid 1px gray;
+    border-right: none;
+    width: 8em;
+    border-radius: 0.4em 0 0 0.4em;
+    box-sizing: border-box;
+    height: 1.6em;
+    outline: none;
+    float: left;
+    user-select: none;
+}
+
+.fileSelector label {
+    font-size: 100%;
+    border-radius: 0 0.4em 0.4em 0;
+    background: #4EB9D5;
+    color: white;
+    border: solid 1px gray;
+    box-sizing: border-box;
+    height: 1.6em;
+    outline: none;
+    float: left;
+    user-select: none;
+    padding: 0.2em 0.4em 0 0.2em;
+}
+
+#upload {
+    display: none;
+}
+
+.header button {
+    margin-left: 1em;
+    font-size: 100%;
+    height: 1.6em;
+}
+
+.blocks {
+    border: solid 1px gray;
+    flex-grow: 1;
+    padding: 0.2em;
+}
+
+.blocks .block {
+    border: solid 1px gray;
+    padding: 0.5em;
+    margin-bottom: 0.2em;
+    margin-right: 1em;
+    border-radius: 0.5em;
+    user-select: none;
+}
+
+.blocks .myblock {
+    background: #FF6581;
+}
+
+.blocks .event {
+    background: #F7C437;
+}
+
+.blocks .selected {
+    border: solid 2px black;
+    margin-left: 1em;
+    margin-right: 0;
+}
+
+.controls {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+}
+
+.controls button {
+    font-size: 120%;
+    border-radius: 0.5em;
+    margin: 0.5em 0em;
+    padding: 0.2em;
+}
+
+.toBrowser {
+    background-color: aqua;
+}
+
+.toFile {
+    background-color: beige;
+}
+
+.danger {
+    background-color: hotpink;
+}
