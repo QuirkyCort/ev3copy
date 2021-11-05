@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/main.css">
+
+  <title>EV3 Classroom / Spike Copy</title>
+</head>
+
+<body>
+  <header>
+    <div>Request Group ID</div>
+  </header>
+
+  <div class="request">
+    <div>Anyone can get a Group ID for free, but you must agree to the following rules...</div>
+    <ol>
+        <li>I will make my own frequent backups, and will not hold this service liable for any loss in data.</li>
+        <li>I understand that the server may be corrupted / shutdown / hit by a meteor at any time.</li>
+        <li>I will keep my Group ID secure, and understand that anyone with my Group ID will be able to read / edit / delete my code.</li>
+        <li>
+            I understand that the service operator will not help me retrieve any lost or accidentally deleted code or Group ID,
+            and will respond to any such request with rule 1, and perhaps the saddest song on the world's smallest violin.
+        </li>
+    </ol>
+    <button id="agree">I agree. Give me a Group ID.</button>
+    <div id="result" style="border: solid 1px black; padding: 0.5em; font-size: 120%; display: none;"></div>
+  </div>
+
+<script>
+    const agreeBtn = document.getElementById('agree');
+    const result = document.getElementById('result');
+
+    function requestGroupID() {
+        result.innerHTML = 'Requesting Group ID...';
+        result.style.display = 'block';
+        agreeBtn.remove();
+        
+        let data = {
+            request: 'GroupID'
+        };
+
+        let init = {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            body: JSON.stringify(data)
+        }
+
+        fetch('requestGroupID.php', init)
+            .then(response => response.text())
+            .then(function(content){
+                if (content) {
+                    result.innerHTML = 'This is your Group ID: <span style="font-weight: bold">' + content + '</span><br>';
+                    result.innerHTML += 'Our use <a href="index.html?groupID=' + content + '">this link</a><br>';
+                    result.innerHTML += 'Copy or bookmark it now. It will not be displayed again.';
+                }
+            });
+    }
+
+    agreeBtn.addEventListener('click', requestGroupID);
+</script>
+
+</body>
+</html>

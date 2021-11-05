@@ -378,7 +378,7 @@ function copyToBrowser() {
         copyBlockWithDependents(selected.blockID, fileProject, browserProject);
         clearBlocks(browserBlocksDiv);
         displayProject(browserBlocksDiv, browserProject);
-        saveToLocalStorage();
+        saveBrowserProject();
     }
 }
 
@@ -397,7 +397,7 @@ function allToBrowser() {
         copyBlockWithDependents(selected.blockID, fileProject, browserProject);
         clearBlocks(browserBlocksDiv);
         displayProject(browserBlocksDiv, browserProject);
-        saveToLocalStorage();
+        saveBrowserProject();
     }
 }
 
@@ -448,7 +448,14 @@ function deleteBlock() {
         deleteBlocksWithChildren(selected.blockID, browserProject);
         clearBlocks(browserBlocksDiv);
         displayProject(browserBlocksDiv, browserProject);
-        saveToLocalStorage();
+        saveBrowserProject();
+    }
+}
+
+function saveBrowserProject() {
+    saveToLocalStorage();
+    if (groupID && groupID != 'none') {
+        uploadToCloud();
     }
 }
 
@@ -461,6 +468,79 @@ function loadFromLocalStorage() {
     if (json) {
         browserProject = JSON.parse(json);
     }
+}
+
+// Read query string
+function readGET(name) {
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+        return null;
+    } else {
+        return decodeURI(results[1]);
+    }
+}
+
+function uploadToCloud() {
+    let data = {
+        groupID: groupID,
+        project: JSON.stringify(browserProject)
+    };
+  
+    let init = {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify(data)
+    }
+  
+    fetch('save.php', init)
+        .then(response => response.text())
+        .then(text => console.log(text));
+}
+
+function retrieveFromCloud() {
+    if (groupID == 'none') {
+        return
+    }
+
+    let data = {
+        groupID: groupID
+    };
+
+    let init = {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify(data)
+    }
+
+    fetch('retrieve.php', init)
+        .then(response => response.text())
+        .then(function(content){
+            if (content == 'INVALID') {
+                invalidWarning.style.display = '';
+            } else {
+                if (content) {
+                    browserProject = JSON.parse(content);
+                } else {
+                    browserProject = JSON.parse(JSON.stringify(defaults.project));
+                }
+                saveToLocalStorage();
+                displayProject(browserBlocksDiv, browserProject);    
+            }
+        });
 }
 
 uploadBtn.addEventListener('change', uploadFile);
@@ -476,3 +556,22 @@ deleteSelectedBtn.addEventListener('click', deleteBlock);
 
 loadFromLocalStorage();
 displayProject(browserBlocksDiv, browserProject);
+
+// Cloud save
+const dialog = document.getElementById('dialog');
+const groupIDInput = document.getElementById('groupID');
+const groupIDSubmit = document.getElementById('groupIDSubmit');
+const invalidWarning = document.getElementById('invalidWarning');
+
+function changeLocation() {
+    groupID = groupIDInput.value;
+    window.location += '?groupID=' + groupID;
+}
+
+groupIDSubmit.addEventListener('click', changeLocation);
+
+var groupID = readGET('groupID');
+if (groupID) {
+    dialog.remove();
+    retrieveFromCloud();
+}
