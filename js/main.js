@@ -166,8 +166,10 @@ function downloadFile(filename) {
             lmspZip.file('icon.svg', icon);
             lmspZip.file('manifest.json', manifest);
             lmspZip.file('scratch.sb3', content);
-            lmspZip.generateAsync({type: 'base64'})
-                .then(function(content) {
+            lmspZip.generateAsync({
+                    type: 'base64',
+                    compression: "DEFLATE"
+                }).then(function(content) {
                     if (filenameInput.value.trim() != '') {
                         filename = filenameInput.value.trim();
                     }
